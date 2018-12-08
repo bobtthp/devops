@@ -1,0 +1,3 @@
+Nov 29 21:14:07 [localhost] systemd-logind: New session 235 of user root.
+Nov 29 21:14:07 [localhost] systemd: Started Session 235 of user root.
+Nov 29 21:14:07 [localhost] systemd: Starting Session 235 of user root.

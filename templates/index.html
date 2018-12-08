@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8" name="viewport"/>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
+	<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <title>运维管理平台</title>
+</head>
+
+<style>
+	.pinfo #pinfo
+	{
+	text-align:center;
+	}
+</style>
+
+
+<script>
+
+</script>
+<body>
+{% if request.user.is_authenticated %}
+<nav class="navbar navbar-inverse">
+        <div class="container">
+              <div class="nav navbar-nav navbar-right">
+            <li><a>您好,{{request.user}}</a></li>
+            <li> <a href="{% url 'server:logout' %}">注销</a></li>
+          </div>
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a  class="navbar-brand" href="/servicelist/index" style="color:white;">运维管理平台</a>
+          </div>
+        </div>
+</nav>
+  <div>
+    <ul class="nav nav-pills" role="tablist">
+      <li role="presentation" class="active"><a href="http://11.11.11.3:8000/users/sign_in">Gitlab</a></li>
+      <li role="presentation" class="dropdown">
+        <a  id="list1" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+          主机管理
+          <span class="caret"></span>
+        </a>
+        <ul id="menu1" class="dropdown-menu" aria-labelledby="list1">
+          <li><a href="/servicelist/kvm">主机列表</a></li>
+          <li><a href="#">Another action</a></li>
+          <li role="separator" class="divider"></li>
+          <li><a href="#">Separated link</a></li>
+        </ul>
+      </li>
+      <li role="presentation" class="dropdown">
+        <a id="list2" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+          服务管理
+          <span class="caret"></span>
+        </a>
+        <ul id="menu2" class="dropdown-menu" aria-labelledby="list2">
+          <li><a href="/servicelist/info">服务列表</a></li>
+          <li><a href="#">Another action</a></li>
+          <li role="separator" class="divider"></li>
+          <li><a href="#">Separated link</a></li>
+        </ul>
+      </li>
+        <li role="presentation" class="dropdown">
+        <a id="list3" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+          资产管理
+          <span class="caret"></span>
+        </a>
+        <ul id="menu3" class="dropdown-menu" aria-labelledby="list3">
+          <li><a href="#">Action</a></li>
+          <li><a href="#">Another action</a></li>
+          <li><a href="#">Something else here</a></li>
+          <li role="separator" class="divider"></li>
+          <li><a href="#">Separated link</a></li>
+        </ul>
+      </li>
+      <li role="presentation" class="dropdown">
+        <a id="list4" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+          发布管理
+          <span class="caret"></span>
+        </a>
+        <ul id="menu4" class="dropdown-menu" aria-labelledby="list4">
+          <li><a href="#">发布列表</a></li>
+          <li><a href="#">Another action</a></li>
+          <li><a href="#">Something else here</a></li>
+          <li role="separator" class="divider"></li>
+          <li><a href="#">Separated link</a></li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+
+        {% else %}
+           <script language="javascript" type="text/javascript">
+                 alert('您尚未登录或已登录超时，请重新登录系统！');
+        window.location.href='/servicelist';
+         </script>
+{% endif %}
+</body>
+</html>

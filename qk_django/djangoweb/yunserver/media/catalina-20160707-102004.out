@@ -1,0 +1,10 @@
+SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
+SLF4J: Defaulting to no-operation (NOP) logger implementation
+SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
+log4j:ERROR LogMananger.repositorySelector was null likely due to error in class reloading, using NOPLoggerRepository.
+Exception in thread "Shutdown Hook" java.lang.NullPointerException
+	at org.logicalcobwebs.proxool.HouseKeeperController.shutdown(HouseKeeperController.java:104)
+	at org.logicalcobwebs.proxool.ProxoolFacade.shutdown(ProxoolFacade.java:246)
+	at org.logicalcobwebs.proxool.ProxoolFacade.shutdown(ProxoolFacade.java:218)
+	at org.logicalcobwebs.proxool.ShutdownHook.run(ShutdownHook.java:95)
+	at java.lang.Thread.run(Thread.java:662)

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8" content="width=device-width, initial-scale=1.0"/>
+<head>
+    <style>
+        body{
+            background-color: #0e1012;color: #ffffff;
+        }
+        *{
+            margin: 0; padding: 0;
+        }
+        #msg{
+            overflow:auto; border:2px solid #303030; color:#ffffff; background-color: #2b2b2b; font-size: 13px; position: absolute; left: 8px; right: 8px; bottom: 8px; top: 40px; word-break:
+break-all;
+        }
+        #log{
+            position: fixed; top: 0; left: 0; width: 100%; height: 40px; text-align: left; margin: 4px 0 0 8px;
+        }
+        #log b{
+            font-size: 26px;
+        }
+        #clear{
+            padding: 5px 10px; border: none; background: #777; float: right; margin: 0 16px 0 0;
+        }
+        #start {
+           padding: 5px 10px; border: none; background: #777; float: right; margin: 0 16px 0 0;
+        }
+        #stop {
+           padding: 5px 10px; border: none; background: #777; float: right; margin: 0 16px 0 0;
+        }
+    </style>
+</head>
+<body onload="init()">
+    <div id="log">
+        <span><b>实时日志</b></span>
+        <button type="button" id="clear">清空</button>
+        <button disabled="disabled" type="button" id="start">开始</button>
+        <button disabled="disabled" type="button" id="stop">停止</button>
+    </div>
+    <div id="pname"></div>
+    <div id="msg"><ul class="list"></ul></div>
+
+    <script src="http://libs.baidu.com/jquery/1.9.1/jquery.min.js"></script>
+    <script>
+        var ws;
+        function init() {
+
+            var url = decodeURI(window.location.href);   //获取项目信息
+            var argindex = url.split("&service_id=");
+            var pname = argindex[1];
+            ws = new WebSocket('ws://' + window.location.host + '/servicelist/loginfo');
+            ws.onopen = function (evt) {
+                $('.list').append('<li>=====websocket连接成功=====</li>');
+                ws.send(pname);  //发送信息给服务器
+            };
+            ws.onmessage = function (evt) {
+                    $('.list').append('<li>' + evt.data + '</li>');
+                    setTimeout(function () {
+                        $('#msg').scrollTop($('.list').height() - $('#msg').height());
+                    }, 100)
+            };
+            ws.onclose =function (evt) {
+                ws.close();
+                ws.send('closed');
+            };
+            $("#start").attr('disabled', true);
+            $("#stop").attr('disabled', false);
+
+        }
+            $("#clear").click(function(){
+                $(".list").html("");
+            });
+            $("#start").click(function(){
+                init();
+            });
+            $("#stop").click(function(){
+                $('.list').append("close Connection!\n");
+                $("#start").attr('disabled', false);
+                $("#stop").attr('disabled', true);
+                console.log('logging stop');
+                ws.close();
+
+            });
+            window.onbeforeunload = function () {   //离开页面之前操作
+            try {
+                ws.close();
+                ws = null;
+            }
+            catch (expection) {
+                $('.list').append(expection)
+            }
+        };
+    </script>
+
+</body>
+</html>
+
+

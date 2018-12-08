@@ -1,0 +1,50 @@
+@charset "utf-8";
+/* CSS Document */
+
+*{margin:0;padding:0;}
+a,u,s,del{color:#fff;text-decoration:none} 
+html,body{width:100%;}
+body {font:normal 100% "Microsoft YaHei UI", sans-serif;}
+li{list-style:none;}
+.margin{width:2003px;margin:0 auto;}
+
+header{width:100%;height:100px;text-align:center;vertical-align:middle;font:600 1.8em/100px ""; color:#ffffff;background-color: #004B97;font-family: 微软雅黑}
+nav{width:100%;background:#003D79;}
+  nav ul{max-width:2003px;margin:0 auto;overflow:hidden;clear:both;}
+  nav ul li{float:left;min-width:500px;display:block;line-height:50px;color:#fff;border-right:1px solid #1d559d;text-align:center;}
+  nav ul li{line-height:50px;}
+  nav ul li:nth-last-child(1){border-right:none;}
+	nav ul li:hover{background:#6387b4;color:#0a1b51;}
+
+main{width:100%;min-height:1500px;color:#000;}
+main ul{max-width:2003px;margin:0 auto;overflow:hidden;}
+main ul li{min-width:500px;height:48px;float:left;border-right:1px solid #96989a;border-bottom:1px solid #96989a;}
+main ul li:nth-last-child(1){border-right:none;}
+main ul li.adress{display:flex;align-items:center;justify-content:center;}
+main ul li.name{display:flex;align-items:center;justify-content:center;}
+main ul li.reset{display:flex;align-items:center;justify-content:center;}
+main ul li.reset button{width:80px;height:28px;font:600 15px/28px "";}
+main ul li.reset button:hover{color:#f4361d;}
+main ul li.print{display:flex;align-items:center;justify-content:center;}
+main ul li.print button{width:80px;height:28px;font:600 15px/28px "";}
+main ul li.print button:hover{color:#f4361d;}
+
+@media screen and (max-width:1580px) {
+  .margin{width:1321px;}
+   nav ul li{min-width:329px;}
+   main ul li{min-width:329px;}
+
+}
+@media screen and (max-width:1199px) {
+  .margin{width:940px;}
+   nav ul li{min-width:234px;}
+   main ul li{min-width:234px;}
+
+}
+
+@media screen and (max-width:991px) {
+  .margin{width:720px;}
+   nav ul li{min-width:179px;}
+   main ul li{min-width:179px;}
+
+}

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>服务显示列表</title>
+</head>
+<meta http-equiv="refresh" content="15" />
+
+<link href="/media/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+<!-- 可选的 Bootstrap 主题文件（一般不用引入） -->
+<link rel="stylesheet" href="/media/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+<script src="/media/css//bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+<nav class="navbar navbar-inverse" role="navigation">
+    <div class="container-fluid">
+    <div class="navbar-header">
+        <a class="navbar-brand" href="{% url 'runserver:list' %}">云服务列表</a>
+    </div>
+    <div>
+        <ul class="nav navbar-nav">
+            <li><a href="{% url 'runserver:update' %}">脚本启动</a></li>
+            <li><a href="/">版本V1.0</a></li>
+            <li><a href="/runserver/testshow">云仿真列表</a></li>
+			
+            </li>
+        </ul>
+    </div>
+    </div>
+</nav>
+<body>
+
+<div class="table-responsive">
+  <table class="table">
+    <caption><strong>青客微软云项目列表-<font color="red">云服务器晚上19点不点延时将全部关闭！！！</font></strong></caption>
+
+    <thead>
+      <tr>
+        <th>编号ID</th>
+        <th>项目名称</th>
+		<th>ip地址</th>
+        <th>启动状态</th>
+        <th>操作状态</th>
+          <th>延时关机</th>
+      </tr>
+
+    </thead>
+    <tbody>
+
+    {% for i in show_list %}
+      <tr>
+        <td>{{ i.id }}</td>
+        <td>{{ i.name }}</td>
+		<td>{{ i.ipaddr }}</td>
+
+      <td>
+              {% if i.state == 0 %}
+                  <font color="blue"><strong>已关闭</strong></font>
+              {% endif %}
+              {% if i.state == 1 %}
+                 <font color="red"><strong>已启动</strong></font>
+              {% endif %}
+              {% if i.state == 2 %}
+                 <font color="red"><strong>启动中....请稍后</strong></font>
+              {% endif %}
+              {% if i.state == 3 %}
+                 <font color="blue"><strong>关闭中....请稍后</strong></font>
+              {% endif %}
+          </td>
+          <td>
+              {% if i.state == 0  %}
+                  <form class="form-inline" role="form" action="{% url 'runserver:list' %}" method="POST">
+                        {% csrf_token %}
+                    <div class="form-group">
+                        <input type="hidden" class="form-control"  id="name" name="user_sql" style="width:400px" value="{{ i.id }}">
+                        <input type="hidden" class="form-control"  id="pname" name="pname" style="width:400px" value="{{ i.name }}">
+                    </div>
+
+                <button type="submit" class="btn btn-default">点击启动</button></form>
+              {% endif %}
+              {% if i.state == 1 %}
+                    <form class="form-inline" role="form" action="{% url 'runserver:ushow' %}" method="POST">
+                        {% csrf_token %}
+                    <div class="form-group">
+                        <input type="hidden" class="form-control"  id="name" name="close_sql" style="width:400px" value="{{ i.id }}">
+                        <input type="hidden" class="form-control"  id="pname" name="pname" style="width:400px" value="{{ i.name }}">
+                    </div>
+
+                <button type="submit" class="btn btn-default">点击关闭</button></form>
+              {% endif %}
+
+          </td>
+
+           <td> {% if i.state == 1 and i.delayedoff == 0 %}
+                     {% if c_time == '17' or c_time == '18' or c_time == '19' %}
+                     <form class="form-inline" role="form" action="{% url 'runserver:sshow' %}" method="POST">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <input type="hidden" class="form-control"  id="name" name="yan_sql" style="width:400px" value="{{ i.id }}">
+                        </div>
+
+                        <button type="submit" class="btn btn-default">点击延时</button></form>
+
+
+                    {% else %}
+                        <strong><font color="#d2691e">17-19点可延时</font></strong>
+                {% endif %}
+            {% endif %}
+           {% if i.delayedoff == 1 %}<strong><font color="red">延时成功</font></strong>{% endif %}
+           </td>
+
+      </tr>
+    {% endfor %}
+
+    </tbody>
+  </table>
+</div>
+
+</body>
+</html>

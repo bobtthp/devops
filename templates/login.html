@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% load staticfiles %}
+    <meta http-equiv="Content-Type" charset="UTF-8">
+    <title>运维平台登录</title>
+    <link rel="stylesheet" href="/static1/css/uikit.min.css" />
+    <script src="/static1/js/uikit.min.js"></script>
+</head>
+<style>
+    body,html{height:100%;}
+	.login
+	{   width:35%;
+        height:45%;
+        margin:0 auto;
+        position:absolute ;
+        left:50%;
+        top:50%;
+        text-align: center;
+        padding-top: 5%;
+        transform:translate(-50%,-50%);
+
+    }
+    .whole
+    {
+        width: 100%;
+        height: 100%;
+    }
+
+
+</style>
+{% if auth_status %}
+    <script type="text/javascript">
+        alert("用户名或密码错误,或用户可能为未激活状态，请联系运维同事！");
+        location.href="/servicelist"
+    </script>
+{% endif %}
+
+<body>
+    <div class="whole" style="background: url(/static/jpeg/1.jpg) no-repeat fixed bottom center;background-size: cover;">
+        <div class="login">
+            <h1 style="text-align:center;color: #ffefef;font-family: 华文楷体">运维平台登录</h1>
+                <h4 style="text-align:center;color: #ffefef;">{{ nowtime }}</h4>
+                    <form class="uk-form" action="{% url 'server:login' %}" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <!-- {{userform.as_p}} -->
+
+        <div class="uk-form-row">
+           <div class="uk-form-controls">
+               <input type="text" id="form-h-it" class="uk-form-width-medium" placeholder="请输入用户名" name="username">
+           </div>
+        </div>
+
+        <div class="uk-form-row">
+            <div class="uk-form-controls ">
+                <input type="password" class="uk-form-width-medium" id="form-h-ip" placeholder="请输入密码" name="password">
+            </div>
+        </div>
+
+        <div class="uk-form-row ">
+            <button class="uk-button uk-button-primary uk-form-width-medium" type="submit">登录</button>
+        </div>
+                        <div class="uk-form-row ">
+            <a class="uk-button uk-button-primary uk-form-width-medium" href="register">注册</a>
+        </div>
+                    </form>
+        </div>
+    </div>
+
+</body>
+</html>

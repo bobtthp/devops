@@ -1,0 +1,71 @@
+<head>
+    <meta charset="utf-8" name="viewport" />
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
+	<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <title>项目发布</title>
+</head>
+
+<style>
+	.pinfo #pinfo
+	{
+	text-align:center;
+	}
+</style>
+<body>
+{% if request.user.is_authenticated %}
+<nav class="navbar navbar-inverse">
+
+        <div class="container">
+            <div class="nav navbar-nav navbar-right">
+            <li><a>您好,{{request.user}}</a></li>
+            <li> <a href="{% url 'server:logout' %}">注销</a></li>
+          </div>
+
+            <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a  class="navbar-brand" style="color:white;">项目发布</a>
+            </div>
+        </div>
+</nav>
+
+<form action="{% url 'server:commit' %}" method="POST">
+    {% csrf_token %}
+  <fieldset disabled>
+    <div class="form-group">
+      <label for="disabledTextInput">项目名称</label>
+      <input type="text" id="disabledTextInput" class="form-control" placeholder="{{ pname }}">
+    </div>
+<!--
+    <div class="checkbox">
+      <label>
+        <input type="checkbox"> Can't check this
+      </label>
+    </div>
+  -->
+  </fieldset>
+    <div class="form-group">
+      <label for="select">项目类型</label>
+      <select id="select" class="form-control">
+            <option>Java</option>
+          <option>Dotnet</option>
+          <option>Docker</option>
+      </select>
+    </div>
+<button type="submit" class="btn btn-primary">开始发布</button>
+</form>
+
+
+
+
+ {% else %}
+           <script language="javascript" type="text/javascript">
+                 alert('您尚未登录或已登录超时，请重新登录系统！');
+        window.location.href='/servicelist';
+         </script>
+{% endif %}

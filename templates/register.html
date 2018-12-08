@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" charset="UTF-8">
+    <title>运维平台注册</title>
+    <link rel="stylesheet" href="http://23.83.253.178/static1/css/uikit.min.css" />
+    <script src="http://23.83.253.178/static1/js/uikit.min.js"></script>
+</head>
+<style>
+    body,html{height:100%;}
+	.regist
+	{   width:35%;
+        height:45%;
+        margin:0 auto;
+        position:absolute ;
+        left:50%;
+        top:50%;
+        text-align: center;
+        padding-top: 5%;
+        transform:translate(-50%,-50%);
+
+    }
+    .whole
+    {
+        width: 100%;
+        height: 100%;
+    }
+    </style>
+{% if user_status %}
+    <script type="text/javascript">
+        alert("该用户已经被注册！");
+        location.href="/servicelist"
+    </script>
+{% endif %}
+{% if passwd_status == False %}
+    <script type="text/javascript">
+        alert("您填入用户信息为空，或两次输入密码可能不一致！");
+        location.href="/servicelist/register"
+    </script>
+{% endif %}
+
+<body>
+  <div class="whole" style="background: url(http://23.83.253.178/static/jpeg/1.jpg) no-repeat fixed bottom center;background-size: cover;">
+      <div class="regist" >
+        <h1 style="text-align:center;color: #ffefef;font-family: 华文楷体">运维平台注册</h1>
+	        <form  class="uk-form" action="{% url 'server:register' %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+	            <div class="uk-form-row">
+		            <div class="uk-form-controls">
+                        <!--用户名要求英文 -->
+			            <p><label for="id_username"></label> <input id="id_username" class="uk-form-width-medium" maxlength="30" placeholder="请输入用户名" name="username" onkeyup="value=value.replace(/[^\w\.\/]/ig,'')"/></p>
+                        <!-- 要求中文名-->
+                        <p><label for="id_name"></label> <input id="id_name" class="uk-form-width-medium" maxlength="30" placeholder="请使用真实姓名" name="true_name" type="text" onkeyup="this.value=this.value.replac/[^\w\.\/]/ig,'')" /></p>
+		            	<p><label for="id_password1"></label> <input id="id_password1" class="uk-form-width-medium"  placeholder="请输入密码" name="password1" type="password" /></p>
+		             	<p><label for="id_password2"></label> <input id="id_password2" class="uk-form-width-medium" name="password2" placeholder="请确认密码" type="password" /></p>
+		                 <input type="submit"  class="uk-button uk-button-primary uk-form-width-medium" value="注册">
+		            </div>
+	            </div>
+	        </form>
+        </div>
+  </div>
+</body>
+</html>

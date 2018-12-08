@@ -1,0 +1,92 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>添加用户</title>
+    <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.0.js"></script>
+  </head>
+  <body>
+    <center>
+      <br><br>
+      添加用户:<br><br>
+      姓名: <input type="text" name="name" id="name" />
+      email: <input type="text" name="email" id="email" />
+      电话: <input type="text" name="tel" id="tel" /><br><br>
+      <button id="addUser">提交</button>
+      <br><br>
+      <hr>
+      <br><br>
+      <table id="usertable" border="1" cellpadding="5" cellspacing=0>
+        <tbody>
+          <tr>
+            <th>姓名</th>
+            <th>email</th>
+            <th>电话</th>
+            <th> </th>
+          </tr>
+          <tr>
+            <td>Tom</td>
+            <td>tom@tom.com</td>
+            <td>5000</td>
+            <td><a href="deleteEmp?id=Tom">Delete</a></td>
+          </tr>
+          <tr>
+            <td>Jerry</td>
+            <td>jerry@sohu.com</td>
+            <td>8000</td>
+            <td><a href="deleteEmp?id=Jerry">Delete</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </center>
+  </body>
+  <script>
+    $(document).ready(function(){
+      $("#addUser").click(function(){
+        var name = $("#name").val();
+        var email = $("#email").val();
+        var tel = $("#tel").val();
+        var $tr = $("<tr>"+
+        "<td>"+name+"</td>"+
+        "<td>"+email+"</td>"+
+        "<td>"+tel+"</td>"+
+        "<td><a href='deleteEmp?id="+name+"'>删除</a></td>"
+        +"</tr>");
+        var $table = $("#usertable");
+        $table.append($tr);
+        $tr.children().children().click(function(){
+          //alert($(domEle).parent().parent().children(":first").text());
+            //方法1.
+//           $(domEle).parent().parent().remove();
+//           return false;
+            //方法2.
+            return deleteTr($tr);
+        });
+        //不能在这里 给每个<a> 加事件 ，每add一次就each一次，会重复弹出confirm
+//       $("tr td a").each(function(index,domEle){
+//         $(domEle).click(function(){
+//           //alert($(domEle).parent().parent().children(":first").text());
+//           //方法1.
+////            $(domEle).parent().parent().remove();
+////            return false;
+//           //方法2.
+//           return deleteTr($(domEle).parent().parent());
+//         });
+//
+//       });
+      });
+      function deleteTr(aObject) {
+        var flag = window.confirm("您确定要删除"+aObject.children(":first").text()+"名称的值吗？");
+//      alert(flag);
+         if(!flag){
+          return false;
+         } else {
+          aObject.remove();
+          return false;
+         }
+        return false;
+      }
+    })
+  </script>
+</html>

@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8" name="viewport"  http-equiv="refresh" content="15"/>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
+	<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <title>服务列表</title>
+</head>
+
+<style>
+	.pinfo #pinfo
+	{
+	text-align:center;
+	}
+</style>
+
+
+<script>
+function Getvalue(obj){
+var id = $.trim($(obj).parent().parent().children(".servicenum").text()) ; //获取当前对象的编号
+//console.log(id);
+$.get("{% url 'server:pinfo' %}",{"id":id},function(json){   //接收后端传来的json,调用python传入id
+            //console.log(json['project_name']);
+            $("#project").val(json['project_name']);	//(jqury选择器#选择id .选择class)填充到输入框
+            $("#http_port").val(json['port']);
+            $("#request_path").val(json['path']);
+            $("#ppath").val(json['docBase']);
+            $("#url").val(json['url']);
+            //console.log(status);
+
+        });
+}
+</script>
+<body>
+{% if request.user.is_authenticated %}
+<nav class="navbar navbar-inverse">
+        <div class="container">
+              <div class="nav navbar-nav navbar-right">
+            <li><a>您好,{{request.user}}</a></li>
+            <li> <a href="{% url 'server:logout' %}">注销</a></li>
+          </div>
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a  class="navbar-brand" href="/servicelist/index" style="color:white;">服务列表</a>
+          </div>
+        </div>
+</nav>
+
+  <table class="table table-striped table-bordered">
+    <thead>
+   	  <tr>
+         <th>服务编号</th>
+   	  	 <th>ip地址</th>
+   	  	 <th>项目名称</th>
+   	  	 <th style="text-align:center;">重启</th>
+   	  	 <th style="text-align:center;">日志打印</th>
+         <th style="text-align:center;">详细信息</th>
+          <th style="text-align:center;">下载日志</th>
+          <th style="text-align:center;">项目发布</th>
+   	  </tr>
+    </thead>
+
+    <tbody>
+    	{% for i in get_info %}
+    <tr>
+        <th class="servicenum">
+            {{ i.id }}
+        </th>
+
+        <th class="adress">
+            {{ i.ip }}
+        </th>
+
+        <th>
+            {{ i.project_name }}
+        </th>
+
+        <th class="prestart" style="text-align:center;">
+          <form  action="{% url 'server:info' %}" method="POST">
+              {% csrf_token %}
+              <input id="reset" type="hidden" name="pname"  value="{{ i.project_name }}">
+              <input id="service_id" type="hidden" name="service_id" value="{{ i.id }}">
+              <button type="submit" class="btn btn-success" value="{{ i.project_name }}" >重启服务</button>
+          </form>
+        </th>
+
+        <th class="plog" style="text-align:center;">
+          <form target="_blank" action="{% url 'server:loginfo' %}" method="GET" >
+              {% csrf_token %}
+              <input id="service_id" type="hidden" name="service_id" value="{{ i.id }}">
+              <button type="submit" class="btn btn-primary">查看日志</button>
+          </form>
+        </th>
+
+        <th class="pinfo" style="text-align:center;">
+		  <!-- <form action="{% url 'server:pinfo' %}" method="GET" > 
+              {% csrf_token %}
+			   -->
+              <!-- 按钮触发模态框 -->
+			<input id="info" type="hidden" name="infoid" value="{{ i.id }}">	
+            <button id="pinfo" type="submit" class="btn btn-info" data-toggle="modal" data-target="#myModal" onclick="Getvalue(this)">
+			查看信息
+			</button>
+            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	        <div class="modal-dialog">
+		    <div class="modal-content">
+			<div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+			<h4 class="modal-title" id="myModalLabel" style="text-align:left;">项目信息</h4>
+			</div>
+
+			
+<div class="modal-body">
+        <form style="text-align:left;">
+		    <div class="form-group">
+            <label for="project_name" class="control-label">项目名称:</label>
+			<!-- label绑定for属性-->
+            <input type="text" class="form-control" id="project" disabled>
+            </div>
+            <div class="form-group">
+            <label for="project_port" class="control-label">访问端口:</label>
+            <input type="text" class="form-control" id="http_port" disabled>
+            </div>
+            <div class="form-group">
+            <label for="project_requestpath" class="control-label">访问路径:</label>
+            <input type="text" class="form-control" id="request_path" disabled>
+            </div>
+            <div class="form-group">
+            <label for="project_addr" class="control-label">项目路径:</label>
+            <input type="text" class="form-control" id="ppath" disabled>
+            <div class="form-group">
+            <label for="project_url" class="control-label">访问链接:</label>
+            <input type="text" class="form-control" id="url" disabled>
+            </div>
+                <!--输入框和字段标记绑定-->
+            </div>
+        </form>
+</div>		
+
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">
+                    关闭
+				</button>
+			</div>
+			
+		    </div>
+			<!-- /.modal-content -->
+	        </div>
+			<!-- /.modal -->
+            </div>
+
+        </th>
+
+        <th class="pdlog" style="text-align:center;">
+          <form  action="{% url 'server:getlog' %}" method="GET">
+              {% csrf_token %}
+              <input id="pname" type="hidden" name="pname" value="{{ i.project_name }}">
+              <button type="submit" class="btn btn-warning" value="{{ i.project_name }}" >下载日志</button>
+          </form>
+        </th>
+
+        <th class="upname" style="text-align:center;">
+          <form  target="_blank" action="{% url 'server:update' %}" method="GET">
+              {% csrf_token %}
+              <input id="pname" type="hidden" name="pname" value="{{ i.project_name }}">
+              <button type="submit" class="btn btn-danger" value="{{ i.project_name }}" >项目发布</button>
+          </form>
+        </th>
+    </tr>
+
+        {% endfor %}
+    </tbody>
+  </table>
+        {% else %}
+           <script language="javascript" type="text/javascript">
+                 alert('您尚未登录或已登录超时，请重新登录系统！');
+        window.location.href='/servicelist';
+         </script>
+{% endif %}
+</body>
+</html>
