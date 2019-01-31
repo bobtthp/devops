@@ -118,8 +118,8 @@ STATIC_URL = '/static/'
 #    ("js", os.path.join(STATIC_ROOT, 'js')),
 #]
 #DEBUG = false static file
-STATIC_PATH = 'C:\Users\\bobtthp\Desktop\qkyunwei\static'
-STATIC_PATH1 = 'C:\Users\\bobtthp\Desktop\qkyunwei\static1'
+STATIC_PATH = 'C:\Users\\bobtthp\Desktop\devops\static'
+STATIC_PATH1 = 'C:\Users\\bobtthp\Desktop\devops\static1'
 
 
 SESSION_COOKIE_DOMAIN = None

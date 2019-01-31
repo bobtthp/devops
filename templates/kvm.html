@@ -57,12 +57,18 @@
         <th class="servicenum">
             {{ i.0 }}
         </th>
-
-        <th class="adress">
-            ip
+        {% if i.2 != 0 %}
+        <th class="adress" style="vertical-align: middle;color:#0DE0AF;">
+            {{ i.2 }}
         </th>
+		{% else %}
+		<th class="adress" style="vertical-align: middle;color: #8a6d3b;">
+            地址未分配
+        </th>
+		
+		{% endif %}
             <th class="server_adress">
-            ip
+            {{ i.3 }}
         </th>
         {% if i.1 == 1 %}
         <th style="vertical-align: middle;color:#0DE0AF;" >

@@ -3,8 +3,8 @@
 <head>
     <meta http-equiv="Content-Type" charset="UTF-8">
     <title>运维平台注册</title>
-    <link rel="stylesheet" href="http://23.83.253.178/static1/css/uikit.min.css" />
-    <script src="http://23.83.253.178/static1/js/uikit.min.js"></script>
+    <link rel="stylesheet" href="/static1/css/uikit.min.css" />
+    <script src="/static1/js/uikit.min.js"></script>
 </head>
 <style>
     body,html{height:100%;}
@@ -40,7 +40,7 @@
 {% endif %}
 
 <body>
-  <div class="whole" style="background: url(http://23.83.253.178/static/jpeg/1.jpg) no-repeat fixed bottom center;background-size: cover;">
+  <div class="whole" style="background: url(/static/jpeg/1.jpg) no-repeat fixed bottom center;background-size: cover;">
       <div class="regist" >
         <h1 style="text-align:center;color: #ffefef;font-family: 华文楷体">运维平台注册</h1>
 	        <form  class="uk-form" action="{% url 'server:register' %}" method="post" enctype="multipart/form-data">

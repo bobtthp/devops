@@ -4,6 +4,8 @@
     <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
 	<script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
 	<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script src="/static/js/echarts.js"></script>
+	<script src="/static/js/dark.js"></script>
     <title>运维管理平台</title>
 </head>
 
@@ -14,10 +16,6 @@
 	}
 </style>
 
-
-<script>
-
-</script>
 <body>
 {% if request.user.is_authenticated %}
 <nav class="navbar navbar-inverse">
@@ -92,7 +90,127 @@
       </li>
     </ul>
   </div>
+    <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+    <div id="cpu" style="width: 1000px;height:300px;"></div>
+	<div id="mem" style="width: 1000px;height:300px;"></div>
+    <script type="text/javascript">
+        // 基于准备好的dom，初始化echarts实例
+        var cpu = echarts.init(document.getElementById('cpu'));
+		var mem = echarts.init(document.getElementById('mem'));
+		var system_list = new Array() ;
+		var cpu_idle_list = new Array() ;
+		var cpu_user_list = new Array() ;
+		var idle_list = new Array() ;
+		var mem_list = new Array() ;
+		var timelist = new Array();
+		function get_cpu_Info() {
+		$.ajax({
+                url: 'http://11.11.11.2:8000/cpu',
+                type: "get",
+				async: true,
+                dataType: "json",
+                error: function() {
+                    console.log("error");
+                },
+                success: function(data) {
+				    for (var i=0;i<10;i++){ 
+					system_list[i] = system_list[i+1];
+					system_list[9] = data.use.system;
+					cpu_idle_list[i] = cpu_idle_list[i+1];
+					cpu_idle_list[9] = data.use.idle; 
+					cpu_user_list[i] = cpu_user_list[i+1];
+					cpu_user_list[9] = data.use.user; 
+					timelist[i] = timelist[i+1];
+					timelist[9] = new Date().toLocaleTimeString();
+					}
+					console.log(cpu_user_list)
+                }
+            });
+		}
+		function get_mem_Info() {
+		$.ajax({
+                url: 'http://11.11.11.2:8000/memory',
+                type: "get",
+				async: true,
+                dataType: "json",
+                error: function() {
+                    console.log("error");
+                },
+                success: function(data) {
+				    for (var i=0;i<10;i++){ 
+					mem_list[i] = mem_list[i+1]
+					mem_list[9] = data.free;
+					}
+                }
+            });
+		}
+		cpu_option = {
+			tooltip: {
+				trigger: 'axis'
+			},
+			legend:{
+				left: 'left',
+				data:['system','idle','user']
+			},
+			xAxis: {
+				type: 'category',
+				data:timelist
+			},
+			yAxis: {
+				type: 'value',
+				axisLabel: {
+				formatter: '{value} %'
+				}
+			},
+			series: [
+			{
+				name: 'system',
+				data: system_list,
+				type: 'line',
+				smooth: true,
+				stack: '总量'
+			},
+			{
+				name:'idle',
+				type:'line',
+				stack: '总量',
+				smooth: true,
+				data:cpu_idle_list
+			},
+			{
+				name:'user',
+				type:'line',
+				stack: '总量',
+				smooth: true,
+				data:cpu_user_list
+			},
+			
+			]
+		};
+		mem_option = {
+			legend:{
+				left: 'left',
+				data:['MEM']
+			},
+			xAxis: {
+				type: 'category',
+				data:timelist
+			},
+			yAxis: {
+				type: 'value'
+			},
+			series: [{
+				name: 'MEM',
+				data: mem_list,
+				type: 'line',
+				smooth: true
+			}]
+		};
+		
 
+        // 使用刚指定的配置项和数据显示图表。
+        setInterval("cpu.setOption(cpu_option),mem.setOption(mem_option),get_cpu_Info();get_mem_Info()","2000");
+    </script>
         {% else %}
            <script language="javascript" type="text/javascript">
                  alert('您尚未登录或已登录超时，请重新登录系统！');
